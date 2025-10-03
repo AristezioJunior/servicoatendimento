@@ -19,6 +19,18 @@ jobs:
           echo "Estrutura de arquivos do repositório:"
           pwd
           ls -R
+      
+      - name: Checkout código
+        uses: actions/checkout@v4
+
+      - name: Mostrar estrutura do repo
+        run: |
+          echo "Diretório atual:"
+          pwd
+	  echo "Conteúdo deste diretório:"
+          ls -la
+	  echo "Conteúdo recursivo:"
+	  ls -R
 
       - name: Set up JDK 21
         uses: actions/setup-java@v4
