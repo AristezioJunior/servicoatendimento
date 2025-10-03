@@ -38,7 +38,7 @@ jobs:
 
       # 4️⃣ Build Maven
       - name: Build Maven
-        working-directory: ..
+        working-directory: ./servicoatendimento/servicoatendimento
         run: mvn clean package -DskipTests
 
       # 5️⃣ Build Docker
