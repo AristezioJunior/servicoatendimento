@@ -1,0 +1,42 @@
+version: "3.9"
+
+networks: 
+  campospet-network:
+    driver: bridge
+
+services:
+  campospet-postgres:
+    image: postgres:15
+    container_name: campospet-postgres
+    environment:
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - "${DB_PORT}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks: 
+      - campospet-network
+    
+  campospet-api:
+    image: ${API_IMAGE}:${API_VERSION}
+    container_name: campospet-api
+    command: ["/wait-for-it.sh", "${DB_HOST}:${DB_PORT}", "-t", "30", "--", "java", "-jar", "api.jar"]
+    environment:
+      DB_HOST: ${DB_HOST}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_NAME: ${DB_NAME}
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE}
+      JWT_SECRET: ${JWT_SECRET}
+      JWT_EXPIRATION: ${JWT_EXPIRATION}
+    ports:
+      - "8080:8080"
+    networks: 
+      - campospet-network
+    depends_on:
+      - campospet-postgres
+
+volumes:
+  postgres_data:

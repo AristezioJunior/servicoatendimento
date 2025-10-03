@@ -3,6 +3,7 @@ package br.com.creedev.domain.exception;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -23,4 +24,15 @@ public class GlobalExceptionHandler {
 			});
 		return ResponseEntity.badRequest().body(errors);
 	}
+	
+    @ExceptionHandler(DomainRuleException.class)
+    public ResponseEntity<String> handleDomainRuleException(DomainRuleException ex) {
+        // Retorna 400 Bad Request com a mensagem de erro do domínio.
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+    }
+    
+    @ExceptionHandler(BusinessException.class)
+    public ResponseEntity<String> handleBusinessException(BusinessException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+    }
 }
