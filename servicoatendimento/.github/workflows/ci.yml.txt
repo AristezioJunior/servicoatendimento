@@ -26,6 +26,10 @@ jobs:
 	  fetch-depth: 0
           clean: false
 
+      - name: Find POM file
+        run: |
+          find . -name "pom.xml" -type f
+
       # 2️⃣ Setup JDK
       - name: Setup Java
         uses: actions/setup-java@v3
