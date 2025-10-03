@@ -1,25 +1,81 @@
-name: CI - Maven Build
+name: CI/CD ServicoAtendimento
 
 on:
   push:
     branches:
-      - main
       - develop
+      - main
   pull_request:
+    branches:
+      - develop
+      - main
 
 jobs:
-  build:
+  build-and-docker:
     runs-on: ubuntu-latest
 
+    env:
+      IMAGE_NAME: creedev/servicoatendimento-api
+      JAVA_VERSION: 21
+
     steps:
-      - name: Checkout código
+      # 1️⃣ Checkout do código
+      - name: Checkout code
         uses: actions/checkout@v4
-
-      - name: Set up JDK 21
-        uses: actions/setup-java@v4
         with:
-          distribution: 'temurin'
-          java-version: '21'
+          fetch-depth: 0
+          clean: false
 
-      - name: Build com Maven
-        run: mvn -f servicoatendimento/pom.xml clean package -DskipTests
+      # 2️⃣ Debug - Verificar estrutura do repositório
+      - name: Debug repository structure
+        run: |
+          echo "Diretório atual: $(pwd)"
+          echo "=== Estrutura completa ==="
+          find . -name "pom.xml" -type f
+          echo "=== Listando diretórios ==="
+          ls -la
+          echo "=== Se existir diretório servicoatendimento ==="
+          if [ -d "servicoatendimento" ]; then
+            ls -la servicoatendimento/
+            find servicoatendimento/ -name "pom.xml" -type f
+          fi
+
+      # 3️⃣ Setup JDK
+      - name: Setup Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: temurin
+          java-version: ${{ env.JAVA_VERSION }}
+
+      # 4️⃣ Build Maven (será ajustado após o debug)
+      - name: Build Maven
+        run: |
+          # Este passo será ajustado baseado no output do debug
+          if [ -f "pom.xml" ]; then
+            echo "POM encontrado na raiz"
+            mvn clean package -DskipTests
+          elif [ -f "servicoatendimento/pom.xml" ]; then
+            echo "POM encontrado em servicoatendimento/"
+            cd servicoatendimento
+            mvn clean package -DskipTests
+          else
+            echo "POM não encontrado. Estrutura:"
+            find . -name "pom.xml" -type f
+            exit 1
+          fi
+
+      # 5️⃣ Build Docker (será ajustado após o debug)
+      - name: Build Docker image
+        run: |
+          if [ -f "Dockerfile" ]; then
+            echo "Dockerfile encontrado na raiz"
+            docker build -t $IMAGE_NAME:${{ github.sha }} .
+          elif [ -f "servicoatendimento/Dockerfile" ]; then
+            echo "Dockerfile encontrado em servicoatendimento/"
+            cd servicoatendimento
+            docker build -t $IMAGE_NAME:${{ github.sha }} .
+          else
+            echo "Dockerfile não encontrado. Estrutura:"
+            find . -name "Dockerfile" -type f
+            exit 1
+          fi
