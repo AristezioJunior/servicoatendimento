@@ -1,42 +1,48 @@
-name: CI - Maven Build
+name: CI/CD Campos-Pet
 
 on:
   push:
     branches:
-      - '**'
+      - develop
+      - main
   pull_request:
+    branches:
+      - develop
+      - main
 
 jobs:
-  build:
+  build-and-docker:
     runs-on: ubuntu-latest
 
+    env:
+      IMAGE_NAME: creedev/campospet-api
+      JAVA_VERSION: 21
+
     steps:
-      - name: Checkout código
-        uses: actions/checkout@v4
+      # 1️⃣ Checkout do código
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-      - name: Mostrar estrutura de arquivos
-        run: |
-          echo "Estrutura de arquivos do repositório:"
-          pwd
-          ls -R
-      
-      - name: Checkout código
-        uses: actions/checkout@v4
-
-      - name: Mostrar estrutura do repo
-        run: |
-          echo "Diretório atual:"
-          pwd
-	  echo "Conteúdo deste diretório:"
-          ls -la
-	  echo "Conteúdo recursivo:"
-	  ls -R
-
-      - name: Set up JDK 21
-        uses: actions/setup-java@v4
+      # 2️⃣ Setup JDK
+      - name: Setup Java
+        uses: actions/setup-java@v3
         with:
-          distribution: 'temurin'
-          java-version: '21'
+          distribution: temurin
+          java-version: ${{ env.JAVA_VERSION }}
 
-      - name: Build com Maven
+      # 3️⃣ Mostrar estrutura do diretório (debug)
+      - name: Ver arquivos
+        run: |
+          pwd
+          ls -la
+
+      # 4️⃣ Build Maven
+      - name: Build Maven
+        working-directory: ./servicoatendimento
         run: mvn clean package -DskipTests
+
+      # 5️⃣ Build Docker
+      - name: Build Docker image
+        working-directory: ./servicoatendimento
+        run: |
+          docker build -t $IMAGE_NAME:${{ github.sha }} .
