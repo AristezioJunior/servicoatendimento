@@ -10,7 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 import br.com.creedev.api.dto.mapper.AgendamentoMapper;
 import br.com.creedev.api.dto.request.AgendamentoRequest;
 import br.com.creedev.api.dto.response.AgendamentoResponse;
-import br.com.creedev.domain.exception.DomainRuleException;
 import br.com.creedev.domain.model.Agendamento;
 import br.com.creedev.domain.model.Pet;
 import br.com.creedev.domain.model.Profissional;

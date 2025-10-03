@@ -23,6 +23,7 @@
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <docker.image.prefix>creedev</docker.image.prefix>
     </properties>
     
     <dependencies>
@@ -140,6 +141,30 @@
                         </path>
                     </annotationProcessorPaths>
                     <release>${java.version}</release>
+                </configuration>
+            </plugin>
+            
+            <plugin>
+                <groupId>com.spotify</groupId>
+                <artifactId>dockerfile-maven-plugin</artifactId>
+                <version>1.4.13</version>
+                <executions>
+                    <execution>
+                        <id>build-docker-image</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>build</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <repository>soulvei/campospet-api</repository>
+                    <tag>${project.version}</tag>
+                    <dockerfile>Dockerfile</dockerfile>
+                    <contextDirectory>${project.basedir}</contextDirectory>
+                    <buildArgs>
+                        <JAR_FILE>target/${project.build.finalName}.jar</JAR_FILE>
+                    </buildArgs>
                 </configuration>
             </plugin>
         </plugins>
