@@ -22,4 +22,4 @@ jobs:
           java-version: '21'
 
       - name: Build com Maven
-        run: mvn clean package -DskipTests
+        run: mvn -f servicoatendimento/pom.xml clean package -DskipTests
