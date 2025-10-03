@@ -23,6 +23,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 	 with:
+	  fetch-depth: 0
           clean: false
 
       # 2️⃣ Setup JDK
@@ -33,11 +34,10 @@ jobs:
           java-version: ${{ env.JAVA_VERSION }}
 
       # 3️⃣ Mostrar estrutura do diretório (debug)
-   - name: Ver arquivos
+   - name: Show repo structure
      run: |
        pwd
-       ls -la
-       ls -la ./servicoatendimento
+       ls -R
 
    # 4️⃣ Build Maven
       - name: Build Maven
