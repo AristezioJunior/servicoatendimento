@@ -22,6 +22,8 @@ jobs:
       # 1️⃣ Checkout do código
       - name: Checkout code
         uses: actions/checkout@v4
+	 with:
+          clean: false
 
       # 2️⃣ Setup JDK
       - name: Setup Java
@@ -39,12 +41,12 @@ jobs:
 
    # 4️⃣ Build Maven
       - name: Build Maven
-        working-directory: ./servicoatendimento/servicoatendimento/
+        working-directory: ./servicoatendimento/servicoatendimento
         run: mvn clean package -DskipTests
 
       # 5️⃣ Build Docker
       - name: Build Docker image
-        working-directory: ./servicoatendimento/servicoatendimento/
+        working-directory: ./servicoatendimento/servicoatendimento
         run: |
           docker build -t $IMAGE_NAME:${{ github.sha }} .
 
