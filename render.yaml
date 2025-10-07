@@ -7,7 +7,7 @@ services:
     region: oregon
     branch: main
     dockerfilePath: servicoatendimento/Dockerfile
-    buildContext: servicoatendimento
+    dockerContext: servicoatendimento
     envVars:
       - key: SPRING_PROFILES_ACTIVE
         value: production
