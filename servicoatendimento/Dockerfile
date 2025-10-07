@@ -3,7 +3,7 @@ FROM eclipse-temurin:21-jdk-alpine AS build
 WORKDIR /app
 COPY . .
 RUN chmod +x mvnw
-RUN ./mvnw clean package -DskipTests -DskipDockerBuild=true
+RUN ./mvnw clean package -DskipTests -Prender
 
 # Etapa 2 - Executar a aplicação
 FROM eclipse-temurin:21-jre-alpine
