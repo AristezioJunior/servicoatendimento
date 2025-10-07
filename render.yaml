@@ -6,8 +6,8 @@ services:
     plan: free
     region: oregon
     branch: main
-    dockerfilePath: ./servicoatendimento/servicoatendimento/Dockerfile
-    buildContext: ./servicoatendimento/servicoatendimento
+    dockerfilePath: servicoatendimento/Dockerfile
+    buildContext: servicoatendimento
     envVars:
       - key: SPRING_PROFILES_ACTIVE
         value: production
@@ -40,5 +40,3 @@ databases:
   - name: campospet-db
     plan: free
     region: oregon
-    databaseName: gestaonegocio
-    user: campospet_user
