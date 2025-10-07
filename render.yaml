@@ -6,7 +6,11 @@ services:
     plan: free
     region: oregon
     branch: main
+    dockerfilePath: ./servicoatendimento/servicoatendimento/Dockerfile
+    buildContext: ./servicoatendimento/servicoatendimento
     envVars:
+      - key: SPRING_PROFILES_ACTIVE
+        value: production
       - key: DB_HOST
         fromDatabase:
           name: campospet-db
@@ -27,8 +31,6 @@ services:
         fromDatabase:
           name: campospet-db
           property: database
-      - key: SPRING_PROFILES_ACTIVE
-        value: production
       - key: JWT_SECRET
         generateValue: true
       - key: JWT_EXPIRATION
