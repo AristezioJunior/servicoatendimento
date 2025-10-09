@@ -1,6 +1,7 @@
 package br.com.creedev.domain.validator;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 
 import org.springframework.stereotype.Component;
 
@@ -48,8 +49,9 @@ public class AgendamentoValidator {
     
     private void validarDataNoFuturo(LocalDateTime inicio) {
         // Ignora segundos para evitar problemas de arredondamento
-        LocalDateTime agora = LocalDateTime.now().withSecond(0).withNano(0);
-        
+        ZoneId zoneId = ZoneId.of("America/Sao_Paulo");
+        LocalDateTime agora = LocalDateTime.now(zoneId).withSecond(0).withNano(0);
+
         if (inicio.isBefore(agora)) {
             throw new DomainRuleException("Não é possível agendar para uma data ou hora passada.");
         }
