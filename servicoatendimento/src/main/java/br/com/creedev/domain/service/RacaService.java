@@ -1,5 +1,8 @@
 package br.com.creedev.domain.service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -76,6 +79,17 @@ public class RacaService {
     public void deletar(Long id) {
         Raca existente = buscarEntidade(id);
         racaRepository.delete(existente);
+    }
+    
+    @Transactional(readOnly = true)
+    public List<RacaResponse> buscarPorEspecieId(Long especieId) {
+        if (!especieRepository.existsById(especieId)) {
+            throw new EntityNotFoundException("Espécie não encontrada: " + especieId);
+        }
+        
+        return racaRepository.findByEspecieId(especieId).stream()
+                .map(racaMapper::toResponse)
+                .collect(Collectors.toList());
     }
 
     // --- Métodos de Ajuda ---

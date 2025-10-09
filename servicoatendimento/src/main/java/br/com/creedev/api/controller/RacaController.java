@@ -1,5 +1,7 @@
 package br.com.creedev.api.controller;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -49,6 +51,15 @@ public class RacaController {
             @PageableDefault(size = 10, sort = "nome") Pageable pageable) {
         Page<RacaResponse> page = racaService.buscarPorNome(termo, pageable);
         return ResponseEntity.ok(page);
+    }
+    
+    /**
+     * Busca Raças por ID da Espécie (sem paginação - retorna todas)
+     */
+    @GetMapping("/especie/{especieId}")
+    public ResponseEntity<List<RacaResponse>> buscarTodasPorEspecieId(@PathVariable Long especieId) {
+        List<RacaResponse> racas = racaService.buscarPorEspecieId(especieId);
+        return ResponseEntity.ok(racas);
     }
 
     @GetMapping
