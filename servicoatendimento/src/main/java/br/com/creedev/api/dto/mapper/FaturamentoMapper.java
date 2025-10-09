@@ -23,7 +23,7 @@ public class FaturamentoMapper {
                 .dataReferencia(request.getDataReferencia())
                 .valorServico(request.getValorServico())
                 .desconto(request.getDesconto())
-                .valorFinal(request.getValorFinal())
+                //.valorFinal(request.getValorFinal())
                 .formaPagamento(request.getFormaPagamento())
                 .statusPagamento(StatusPagamento.PENDENTE)
                 .build();
